@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { taskSchema } from "../validations/taskSchema";
 import { taskServices } from "../services/taskServices";
 import { taskRepository } from "../repositories/taskRepository";
+import { paginationSchema } from "../validations/paginationSchema";
 
 export const taskControllers = {
   async create(req: Request, res: Response, next: NextFunction) {
@@ -20,6 +21,27 @@ export const taskControllers = {
       const taskCreated = await taskServices.create(task, taskRepository);
 
       return res.status(200).json({ message: "Tasks!", task });
+    } catch (error) {
+      return next(error);
+    }
+  },
+
+  async read(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userID = req.userID
+      const { limit, offset, filter } = paginationSchema.parse(req.query);
+
+      const userTasks = await taskServices.read(
+        {
+          userID,
+          limit,
+          offset,
+          filter,
+        },
+        taskRepository
+      );
+
+      return res.status(200).json(userTasks);
     } catch (error) {
       return next(error);
     }
