@@ -6,7 +6,7 @@ type CreateTaskTypes = CreateTaskDataTypes & { id: string };
 export const taskRepository = {
   async createTask(data: CreateTaskTypes) {
     try {
-      const { id, title, description, date, status, idUser} = data;
+      const { id, title, description, date, status, idUser } = data;
 
       const db = await sqliteConnection();
 
@@ -30,6 +30,39 @@ export const taskRepository = {
       const user = await db.get(querySQL, [id]);
 
       return user;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async updateTask(data: CreateTaskTypes) {
+    try {
+      const { id, title, description, date, status } = data;
+
+      const db = await sqliteConnection();
+
+      const querySQL = `
+      UPDATE tasks 
+      SET title = ?, description = ?, date = ?, status = ? 
+      WHERE id = ?;`;
+
+      await db.run(querySQL, [title, description, date, status, id]);
+
+      return { id };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async deleteTask(id: string) {
+    try {
+      const db = await sqliteConnection();
+
+      const querySQL = "DELETE FROM tasks WHERE id = ?;";
+
+      await db.run(querySQL, [id]);
+
+      return { id };
     } catch (error) {
       throw error;
     }
