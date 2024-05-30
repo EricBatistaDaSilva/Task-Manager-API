@@ -8,7 +8,7 @@ export const authControllers = {
     try {
       const { email, password } = loginSchema.parse(req.body);
 
-      const token = await authServices.login(
+      const {token, id} = await authServices.login(
         { email, password },
         userRepository
       );
@@ -20,7 +20,7 @@ export const authControllers = {
         maxAge: 1000 * 60 * 60 * 18, // 18h
       });
 
-      return res.status(200).json({ message: "User logged in!" });
+      return res.status(200).json({ message: "User logged in!", id });
     } catch (error) {
       return next(error);
     }
