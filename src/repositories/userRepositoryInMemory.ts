@@ -10,8 +10,8 @@ const users = [
 
   {
     id: "2",
-    name: "user1",
-    email: "user1@gmail.com",
+    name: "user2",
+    email: "user2@email.com",
     password: "$2b$10$7LxCCXAAvkWj8di5um53eOiy2HThbqoLSm07g5Eahm4DmDJbTYrTe",
   },
 ];

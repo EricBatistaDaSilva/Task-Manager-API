@@ -17,14 +17,16 @@ export const paginationSchema = z
         invalid_type_error: "offset must be a string!",
       })
       .max(255, "max offset length exceeded!")
-      .regex(/^\d+$/, "limit must have only numbers!")
+      .regex(/^\d+$/, "offset must have only numbers!")
       .optional(),
 
-    filter: z.enum(["all", "pending", "completed"], {
-      required_error: "filter is required!",
-      invalid_type_error: "filter must be a 'pending' or 'completed'!",
-    }),
+    filter: z
+      .enum(["completed", "pending", "late", "all"], {
+        invalid_type_error: "filter must be a string!",
+        required_error: "filter is required and must be 'completed', 'pending', 'late' or 'all'",
+      })
+      .optional(),
   })
   .strict();
 
-export type PaginationDataType = z.infer<typeof paginationSchema>;
+export type PaginationDataTypes = z.infer<typeof paginationSchema>;
